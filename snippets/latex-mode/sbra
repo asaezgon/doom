@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: squared bracket
+# uuid:
+# key: sbra
+# condition: t
+# --
+\left[\right]

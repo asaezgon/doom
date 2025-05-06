@@ -1,0 +1,25 @@
+# -*- mode: snippet -*-
+# name: plot
+# key: plot
+# contributor: asaez
+# --
+
+
+fig = figure($0)
+rcParams = PyPlot.PyDict(PyPlot.matplotlib."rcParams")
+rcParams["font.size"] = $1
+
+subplot($2)
+xlabel($3)
+ylabel($4)
+errorbar(value.($5), value.($6), err.($7), err.($8), fmt="s", mfc="none", label=$9, color=$10)
+#plot(x, y)
+
+ax = gca()
+#ylim()
+#xlim()
+#setp(ax.get_yticklabels(),visible=false)
+#legend(loc="lower center", bbox_to_anchor=(-.05,-.45), ncol=3)
+tight_layout()
+	
+#savefig("name.pdf")

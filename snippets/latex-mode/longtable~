@@ -1,0 +1,15 @@
+# -*- mode: snippet -*-
+# name: longtable
+# key: longtab
+# --
+
+\begin{longtable}{c c c c}
+\label{tab:label}
+    1 & 2 & 3 & 4 \\
+    \toprule
+    1 & 2 & 3 & 4 \\
+    \midrule
+    1 & 2 & 3 & 4 \\
+    \bottomrule
+    \caption}
+\end{longtable}

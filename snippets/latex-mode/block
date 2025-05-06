@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: block
+# uuid:
+# key: block
+# condition: t
+# --
+\setbeamercolor{block title}{bg=myred, fg=mywhite}
+\setbeamercolor{block body}{bg=myred_light, fg=black}
+\begin{block}{$1}
+    $2
+\end{block}

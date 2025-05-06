@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: array
+# key: array
+# contributor: asaez
+# --
+
+$1 = Array{$2,1}(undef, $3)

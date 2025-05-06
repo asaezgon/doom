@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: underscore with delete
+# key: xp
+# --
+`(delete-backward-char 1)`_

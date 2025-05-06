@@ -1,0 +1,16 @@
+# -*- mode: snippet -*-
+# name: longtable
+# key: longtab
+# --
+\afterpage{
+\begin{longtable}{c c c}
+\label{}
+   a & b & c \\\\
+    \toprule
+  a & b & c \\\\
+  \midrule
+  a & b & c \\\\
+  \bottomrule
+\caption{}
+\end{longtable}
+}

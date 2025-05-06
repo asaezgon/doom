@@ -1,0 +1,323 @@
+# -*- mode: snippet -*-
+# name: beamer
+# key: beam
+# --
+\documentclass[numbering=fraction]{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage{blindtext}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{tikz}
+\usepackage{xcolor}
+\usepackage{appendixnumberbeamer}
+
+\usetheme[progressbar=frametitle]{metropolis}
+
+
+\setbeamertemplate{blocks}[rounded][shadow=false]
+
+%Define colors
+\definecolor{mycolor}{RGB}{150, 150, 150}
+\definecolor{background}{RGB}{255,255,255}
+\definecolor{accent}{RGB}{70, 130, 180} % Add an accent color
+\definecolor{myred}{RGB}{230, 105, 105}
+\definecolor{myred_light}{RGB}{249, 217, 217}
+\definecolor{mygreen}{RGB}{105, 230, 105}
+\definecolor{mygreen_light}{RGB}{217, 249, 217}
+\definecolor{myblue}{RGB}{105, 105, 230}
+\definecolor{myblue_light}{RGB}{217, 217, 249}
+\definecolor{mywhite}{RGB}{255, 255, 255}
+
+%Adding logo to title page
+%\titlegraphic{\includegraphics[width=3cm]{Unilogo_schwarz_T3.png}}
+
+%Adjust color theme
+\setbeamercolor{frametitle}{bg=mycolor}
+\setbeamercolor{title separator}{fg=mycolor}
+\setbeamercolor{footline}{fg=gray}
+\setbeamercolor{progress bar}{fg=black}
+\setbeamercolor{block title}{bg=accent, fg=white}
+\setbeamercolor{block body}{bg=background, fg=black}
+\setbeamercolor{background canvas}{bg=background}  % This sets the slide background color
+
+%Adding footer
+\setbeamertemplate{frame footer}{\insertshortauthor~(\insertshortinstitute)}
+
+%Set parameters for title page
+\title{Title}
+\author[Alejandro Saez-Gonzalvo]{Alejandro Saez-Gonzalvo}
+\institute{IFIC}
+\date{\today{}}
+
+\begin{document}
+
+\begin{frame}[plain]{}
+    \maketitle
+\end{frame}
+
+\section{New Section}
+
+\begin{frame}{Some Blind Text}
+    \blindtext
+\end{frame}
+
+\begin{frame}{Some Items}
+    \begin{itemize}
+        \item Item 1
+        \item Item 2
+        \item Item 3
+        \begin{itemize}
+            \item Subitem 1
+            \item Subitem 2
+        \end{itemize}
+    \end{itemize}
+
+    \begin{enumerate}
+        \item Number 1
+        \item Number 2
+    \end{enumerate}
+\end{frame}
+
+\begin{frame}{Some Boxes}
+    \begin{block}{Simple Block}
+        This is a sample text
+    \end{block}
+    \begin{exampleblock}{Example Block}
+        This is a sample text
+    \end{exampleblock}
+    \begin{alertblock}{Alert Block}
+        This is a sample text
+    \end{alertblock}
+\end{frame}
+
+\begin{frame}{Conceptual Tree}
+  \centering
+  \begin{tikzpicture}[
+      sibling distance=3cm,
+      level distance=1.5cm,
+      every node/.style={draw, rectangle, rounded corners, fill=accent, text=white, align=center}
+    ]
+    \node {Lattice QCD}
+      child { node {QCD Effects}
+        child { node {Confinement} }
+        child { node {Chiral Symmetry Breaking} }
+      }
+      child { node {Applications}
+        child { node {Flavor Physics} }
+        child { node {Muon $g-2$} }
+      };
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Vertical Conceptual Tree with Curved Lines}
+  \centering
+  \begin{tikzpicture}[
+      sibling distance=2cm,
+      level distance=1.5cm,
+      every node/.style={draw, rectangle, rounded corners, fill=accent, text=white, align=center},
+      edge from parent path={(\tikzparentnode.south) .. controls +(.5,-1) and +(-.5,-1) .. (\tikzchildnode.north)}
+    ]
+    \node {Lattice QCD}
+      child { node {QCD Effects}
+        child { node {Confinement} }
+        child { node {Chiral Symmetry Breaking} }
+      }
+      child { node {Applications}
+        child { node {Flavor Physics} }
+        child { node {Muon $g-2$} }
+      };
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Horizontal Conceptual Tree}
+  \centering
+  \begin{tikzpicture}[
+      grow=right,
+      sibling distance=2cm,
+      level distance=1.5cm,
+      every node/.style={draw, rectangle, rounded corners, fill=accent, text=white, align=center}
+    ]
+    \node {Lattice QCD}
+      child { node {QCD Effects}
+        child { node {Confinement} }
+        child { node {Chiral Symmetry Breaking} }
+      }
+      child { node {Applications}
+        child { node {Flavor Physics} }
+        child { node {Muon $g-2$} }
+      };
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Horizontal Conceptual Tree with 90-Degree Connections}
+  \centering
+  \begin{tikzpicture}[
+      grow=right,
+      sibling distance=2cm,
+      level distance=1.5cm,
+      every node/.style={draw, rectangle, rounded corners, fill=accent, text=white, align=center},
+      edge from parent path={(\tikzparentnode.east) |- (\tikzchildnode.west)}
+    ]
+    \node {Lattice QCD}
+      child { node {QCD Effects}
+        child { node {Confinement} }
+        child { node {Chiral Symmetry Breaking} }
+      }
+      child { node {Applications}
+        child { node {Flavor Physics} }
+        child { node {Muon $g-2$} }
+      };
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Custom Conceptual Tree with Right Angles}
+  \centering
+  \begin{tikzpicture}[
+      sibling distance=2cm,
+      level distance=1.5cm,
+      every node/.style={draw, rectangle, rounded corners, fill=accent, text=white, align=center},
+      edge from parent path={(\tikzparentnode.south) |- ++(0,-.5) -- (\tikzchildnode.north)}
+    ]
+    \node {Lattice QCD}
+      child { node {QCD Effects}
+        child { node {Confinement} }
+        child { node {Chiral Symmetry Breaking} }
+      }
+      child { node {Applications}
+        child { node {Flavor Physics} }
+        child { node {Muon $g-2$} }
+      };
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Vertical Conceptual Tree with 90-Degree Connections}
+  \centering
+  \begin{tikzpicture}[
+      sibling distance=2cm,
+      level distance=1.5cm,
+      every node/.style={draw, rectangle, rounded corners, fill=accent, text=white, align=center},
+      edge from parent path={(\tikzparentnode.south) |- (\tikzchildnode.north)}
+    ]
+    \node {Lattice QCD}
+      child { node {QCD Effects}
+        child { node {Confinement} }
+        child { node {Chiral Symmetry Breaking} }
+      }
+      child { node {Applications}
+        child { node {Flavor Physics} }
+        child { node {Muon $g-2$} }
+      };
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Block Structure}
+  \centering
+  \begin{tikzpicture}[
+      every node/.style={draw, rounded corners, align=center, minimum width=2cm, minimum height=1cm},
+      redblock/.style={fill=red!70, text=white},
+      greenblock/.style={fill=green!70, text=white},
+      blueblock/.style={fill=blue!70, text=white}
+    ]
+
+    % Nodes
+    \node[redblock] (A) at (0, 2) {A}; % A at top center
+    \node[greenblock] (B) at (0, 0) {B}; % B in center
+    \node[blueblock] (C) at (3, 0) {C}; % C to the right of B
+
+    % Connections
+    \draw[->] (A) -- (B); % A to B
+    \draw[->] (B) -- (C); % B to C
+
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}{Two Column Layout}
+  \begin{columns}
+    \begin{column}{0.5\textwidth}
+      \begin{itemize}
+        \item Item 1A
+        \item Item 2A
+        \item Item 3A
+      \end{itemize}
+    \end{column}
+    
+    \begin{column}{0.5\textwidth}
+      \begin{itemize}
+        \item Item 1B
+        \item Item 2B
+        \item Item 3B
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Two Columns with Two Rows Each}
+  \begin{columns}
+    % Left Column
+    \begin{column}{0.5\textwidth}
+      \begin{itemize}
+        \item[Row 1] Item 1A
+        \item Item 2A
+        \item Item 3A
+      \end{itemize}
+      \begin{itemize}
+        \item[Row 2] Item 1B
+        \item Item 2B
+        \item Item 3B
+      \end{itemize}
+    \end{column}
+    
+    % Right Column
+    \begin{column}{0.5\textwidth}
+      \begin{itemize}
+        \item[Row 1] Item 1C
+        \item Item 2C
+        \item Item 3C
+      \end{itemize}
+      \begin{itemize}
+        \item[Row 2] Item 1D
+        \item Item 2D
+        \item Item 3D
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+
+\begin{frame}{Three Colored Blocks}
+  % Red Block
+  \setbeamercolor{block title}{bg=myred, fg=mywhite}
+  \setbeamercolor{block body}{bg=myred_light, fg=black}
+  \begin{block}{Red Block}
+    \begin{itemize}
+      \item This is the red block.
+      \item More content can go here.
+    \end{itemize}
+  \end{block}
+
+  % Green Block
+  \setbeamercolor{block title}{bg=mygreen, fg=mywhite}
+  \setbeamercolor{block body}{bg=mygreen_light, fg=black}
+  \begin{block}{Green Block}
+    \begin{itemize}
+      \item This is the green block.
+      \item Additional details can be placed here.
+    \end{itemize}
+  \end{block}
+
+  % Blue Block
+  \setbeamercolor{block title}{bg=myblue, fg=mywhite}
+  \setbeamercolor{block body}{bg=myblue_light, fg=black}
+  \begin{block}{Blue Block}
+    \begin{itemize}
+      \item This is the blue block.
+      \item Further information can be added.
+    \end{itemize}
+  \end{block}
+\end{frame}
+
+\appendix
+% put here backup slides
+
+\end{document}

@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: bracket squared
+# key:  [
+# --
+\left[\right]

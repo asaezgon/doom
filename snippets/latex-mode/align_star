@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: align star
+# key: ali*
+# --
+\begin{align*}
+\label{eq:$0}
+$1&=$2, \notag \\\
+$3&=$4.
+\end{align*}

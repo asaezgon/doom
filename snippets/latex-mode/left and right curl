@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: left and right curl
+# key: lrc
+# --
+\left\{ $0 \right\}

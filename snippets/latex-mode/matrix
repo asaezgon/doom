@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: matrix
+# key: matrix
+# --
+
+\begin{pmatrix} 1 & 2 \\ 3 & 4 \\ \end{pmatrix}

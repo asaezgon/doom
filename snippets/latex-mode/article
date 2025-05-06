@@ -1,0 +1,34 @@
+# -*- mode: snippet -*-
+# name: full template of article class
+# key: article
+# --
+\documentclass[$1]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{array}
+\usepackage[showframe=false]{geometry}
+\usepackage{changepage}
+\usepackage[]{graphicx}
+\usepackage{caption}
+\usepackage{subcaption}
+\usepackage[toc,page]{appendix}
+\usepackage{bm}
+\usepackage{float}
+\usepackage{amsmath}
+\usepackage{mathtools}   % loads »amsmath«
+\usepackage{authblk}
+\usepackage[colorlinks=true, allcolors=blue]{hyperref}
+\usepackage{longtable}
+\numberwithin{equation}{section}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{afterpage}
+
+\title{$2}
+\author[1]{$3}
+
+\begin{document}
+\maketitle
+$0
+\end{document}

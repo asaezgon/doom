@@ -1,0 +1,18 @@
+# -*- mode: snippet -*-
+# name: fit
+# key: fit
+# contributor: asaez
+# --
+
+function model(x,p) 
+	 return [p[1] + p[2] * x[i] for i in 1:length(x)]
+end
+
+x = $1
+uwerr.(x)
+y = $2
+uwerr.(y)
+up, chi2, chi_exp, pv = fit_alg(model,value.(x),y,$3)
+res = model_continuum(x, up)
+uwerr.(res)
+uwerr.(up)

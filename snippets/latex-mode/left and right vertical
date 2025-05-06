@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: left and right vertical
+# key: lrv
+# --
+\left|$0\right|

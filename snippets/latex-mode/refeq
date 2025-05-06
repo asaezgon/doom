@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: refeq
+# key: eqref
+# --
+
+eq.~(\ref{})

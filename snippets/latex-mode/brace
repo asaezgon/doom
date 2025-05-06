@@ -1,0 +1,12 @@
+# -*- mode: snippet -*-
+# name: brace
+# key: br
+# --
+\begin{align*}
+{\rm $0 \;}\left\{
+      \begin{array}{l}
+        $1 = $2, \\
+        $3 = $4
+      \end{array}
+  \right.
+\end{align*}

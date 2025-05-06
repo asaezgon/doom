@@ -1,0 +1,5 @@
+# -*- mode: snippet -*-
+# name: left and right squared
+# key: lrs
+# --
+\left[ $0 \right]

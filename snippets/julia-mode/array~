@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: emptyarray
+# key: earray
+# contributor: asaez
+# --
+
+$1 = Array{$2,1}()
