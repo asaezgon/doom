@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: ticks y-axis
+# uuid:
+# key: ytk
+# condition: t
+# --
+yticks($1, $2, fontsize=8)

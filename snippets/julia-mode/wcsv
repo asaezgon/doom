@@ -1,0 +1,8 @@
+# -*- mode: snippet -*-
+# name: write CSV
+# uuid:
+# key: wcsv
+# condition: t
+# ---
+fb = "$1.csv"
+CSV.write(fb, (x=$2, y=$3))

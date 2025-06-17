@@ -1,0 +1,9 @@
+# -*- mode: snippet -*-
+# name: read CSV
+# uuid:
+# key: rcsv
+# condition: t
+# --
+fb = "$1.csv"
+data = CSV.read(fb, DataFrame)
+x = data[1, :x]

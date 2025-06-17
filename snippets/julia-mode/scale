@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: scale y-axis
+# uuid:
+# key: ysc
+# condition: t
+# --
+yscale("$1")

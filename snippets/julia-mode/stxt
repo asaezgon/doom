@@ -1,0 +1,22 @@
+# -*- mode: snippet -*-
+# name: save txt
+# uuid:
+# key: stxt
+# condition: t
+# --
+
+filename = "$1"
+array = $2
+open(filename, "w") do f
+    if ndims(array) == 1
+        for val in array
+            println(f, val)
+        end
+    elseif ndims(array) == 2
+        for row in eachrow(array)
+            println(f, join(row, '\t'))  # Usa tabulaciones para separar columnas
+        end
+    else
+        error("Este script solo admite arrays de 1 o 2 dimensiones.")
+    end
+end

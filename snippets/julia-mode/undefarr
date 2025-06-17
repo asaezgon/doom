@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: undef array
+# uuid:
+# key: undefarr
+# condition: t
+# --
+Array{$1,1}(undef, $2)

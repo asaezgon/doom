@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: scale x-axis
+# uuid:
+# key: xsc
+# condition: t
+# --
+xscale("$1")

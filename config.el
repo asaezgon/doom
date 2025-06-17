@@ -119,26 +119,17 @@ F5 again will unset 'selective-display' by setting it to 0."
   ;; Enable forward and inverse search
   (add-hook 'LaTeX-mode-hook 'TeX-source-correlate-mode))
 
-;; ;; Refresh pdf buffer after latex compilation
-;; (add-hook 'TeX-after-compilation-finished-functions #'TeX-revert-document-buffer)
-;; (setq TeX-view-program-selection '((output-pdf "PDF Tools")))
-;; (setq TeX-view-program-list '(("PDF Tools" TeX-pdf-tools-sync-view)))
+;; insert % after RET in latex
+(defun my/latex-newline-with-comment ()
+  "Insert a newline, a comment %, and another newline."
+  (interactive)
+  (newline)
+  (insert "%")
+  (newline))
 
-;; ;; Switch back to tex window after compiling latex
-;; (defun my-auctex-compile-and-stay ()
-;;   "Run `TeX-command-run-all` and automatically switch back to LaTeX buffer."
-;;   (interactive)
-;;   (let ((origin-window (selected-window)))  ;; Store current window
-;;     (TeX-command-run-all nil)               ;; Compile and show PDF
-;;     (run-at-time "1 sec" nil
-;;                  (lambda (win)
-;;                    (when (window-live-p win)  ;; Ensure the window still exists
-;;                      (select-window win)))
-;;                           origin-window)))  ;; Pass `origin-window` to the lambda
-
-;; (add-hook 'LaTeX-mode-hook
-;;           (lambda ()
-;;             (define-key TeX-mode-map (kbd "C-c C-a") 'my-auctex-compile-and-stay)))
+(after! latex
+  (map! :map LaTeX-mode-map
+        :i [return] #'my/latex-newline-with-comment))
 
 ;; Insert path to figs in latex
 (defun my-includegraphics-complete-file-name ()
@@ -279,26 +270,25 @@ If the selected file is a directory, open it normally in Dired mode."
 ;; (after! dired
 ;;   (define-key dired-mode-map (kbd "RET") #'my-dired-open-pdf-split-right))
 
-;; Resizing windows
-(defun my-shrink-window-1-line ()
-  "Shrink the current window vertically by 1 line."
-  (interactive)
-  (shrink-window 1))
+(defun my-shrink-window-1-line (&optional n)
+  "Shrink the current window vertically by N lines (default 1)."
+  (interactive "p")
+  (shrink-window (or n 1)))
 
-(defun my-enlarge-window-1-line ()
-  "Enlarge the current window vertically by 1 line."
-  (interactive)
-  (enlarge-window 1))
+(defun my-enlarge-window-1-line (&optional n)
+  "Enlarge the current window vertically by N lines (default 1)."
+  (interactive "p")
+  (enlarge-window (or n 1)))
 
-(defun my-shrink-window-horizontally-1-column ()
-  "Shrink the current window horizontally by 1 column."
-  (interactive)
-  (shrink-window-horizontally 1))
+(defun my-shrink-window-horizontally-1-column (&optional n)
+  "Shrink the current window horizontally by N columns (default 1)."
+  (interactive "p")
+  (shrink-window-horizontally (or n 1)))
 
-(defun my-enlarge-window-horizontally-1-column ()
-  "Enlarge the current window horizontally by 1 column."
-  (interactive)
-  (enlarge-window-horizontally 1))
+(defun my-enlarge-window-horizontally-1-column (&optional n)
+  "Enlarge the current window horizontally by N columns (default 1)."
+  (interactive "p")
+  (enlarge-window-horizontally (or n 1)))
 
 ;; Vertical resizing
 (global-set-key (kbd "C-x <up>") 'my-enlarge-window-1-line)
@@ -396,11 +386,11 @@ If the selected file is a directory, open it normally in Dired mode."
   (interactive)
   (mi/pdf-kill-buffer-condicional))
 
-(defun mi/set-pdf-kill-buffer ()
-  "Reasigna C-x k solo en buffers PDF."
-  (local-set-key (kbd "C-x k") #'mi/pdf-kill-buffer))
+;; (defun mi/set-pdf-kill-buffer ()
+;;   "Reasigna C-x k solo en buffers PDF."
+;;   (local-set-key (kbd "C-x k") #'mi/pdf-kill-buffer))
 
-(add-hook 'pdf-view-mode-hook #'mi/set-pdf-kill-buffer)
+;; (add-hook 'pdf-view-mode-hook #'mi/set-pdf-kill-buffer)
 
 ;; diff-hl para resaltar cambios en archivo
 (add-hook 'prog-mode-hook 'diff-hl-mode)
@@ -447,24 +437,24 @@ If the selected file is a directory, open it normally in Dired mode."
   :config
   ;; Habilitar el contexto para múltiples cuentas
   (setq mu4e-contexts
-        `( ,(make-mu4e-context
-             :name "Gmail"
-             :match-func (lambda (msg) (when msg (string= "asaez426@gmail.com" (mu4e-message-field msg :from))))
-             :vars '((user-mail-address . "asaez426@gmail.com")
-                     (user-full-name . "Alejandro Saez")
-                     (mu4e-drafts-folder . "/[Gmail]/Drafts")
-                     (mu4e-sent-folder   . "/[Gmail]/Sent Mail")
-                     (mu4e-trash-folder  . "/[Gmail]/Trash")
-                     (mu4e-compose-signature . "Alejandro")
-                     (smtpmail-smtp-user . "asaez426")
-                     (smtpmail-local-domain . "gmail.com")
-                     (smtpmail-default-smtp-server . "smtp.gmail.com")
-                     (smtpmail-smtp-server . "smtp.gmail.com")
-                     (smtpmail-smtp-service . 587)
-                     (smtpmail-auth-credentials . '(("smtp.gmail.com" 587 "asaez426@gmail.com" nil)))
-                     (smtpmail-stream-type  . starttls)
-                     (smtpmail-starttls-credentials . (("smtp.gmail.com" 587 nil nil)))
-                     ))
+        `( ;; ,(make-mu4e-context
+           ;;   :name "Gmail"
+           ;;   :match-func (lambda (msg) (when msg (string= "asaez426@gmail.com" (mu4e-message-field msg :from))))
+           ;;   :vars '((user-mail-address . "asaez426@gmail.com")
+           ;;           (user-full-name . "Alejandro Saez")
+           ;;           (mu4e-drafts-folder . "/[Gmail]/Drafts")
+           ;;           (mu4e-sent-folder   . "/[Gmail]/Sent Mail")
+           ;;           (mu4e-trash-folder  . "/[Gmail]/Trash")
+           ;;           (mu4e-compose-signature . "Alejandro")
+           ;;           (smtpmail-smtp-user . "asaez426")
+           ;;           (smtpmail-local-domain . "gmail.com")
+           ;;           (smtpmail-default-smtp-server . "smtp.gmail.com")
+           ;;           (smtpmail-smtp-server . "smtp.gmail.com")
+           ;;           (smtpmail-smtp-service . 587)
+           ;;           (smtpmail-auth-credentials . '(("smtp.gmail.com" 587 "asaez426@gmail.com" nil)))
+           ;;           (smtpmail-stream-type  . starttls)
+           ;;           (smtpmail-starttls-credentials . (("smtp.gmail.com" 587 nil nil)))
+           ;;           ))
 
            ,(make-mu4e-context
              :name "IFIC"
@@ -487,31 +477,25 @@ If the selected file is a directory, open it normally in Dired mode."
 
 (setq mu4e-bookmarks
       '((:name "Unread messages"
-         :query "(maildir:/GmailAccount/INBOX/ OR maildir:/IFIC/INBOX/ OR maildir:/OutlookAccount/INBOX/) AND flag:unread"
+        ;; :query "(maildir:/GmailAccount/INBOX/ OR maildir:/IFIC/INBOX/ OR maildir:/OutlookAccount/INBOX/) AND flag:unread"
+         :query "(maildir:/IFIC/INBOX/) AND flag:unread"
          :key ?u)
-        (:name "Today's messages"
-         :query "(maildir:/GmailAccount/INBOX/ OR maildir:/IFIC/INBOX/ OR maildir:/OutlookAccount/INBOX/) AND date:today.."
-         :key ?t)
-        (:name "Last 7 days"
-         :query "(maildir:/GmailAccount/INBOX/ OR maildir:/IFIC/INBOX/ OR maildir:/OutlookAccount/INBOX/) AND date:7d.."
-         :key ?w)
-        (:name "Messages with images"
-         :query "(maildir:/GmailAccount/INBOX/ OR maildir:/IFIC/INBOX/ OR maildir:/OutlookAccount/INBOX/) AND mime:image/*"
-         :key ?p)))
+        ))
 
 (setq mu4e-maildir-shortcuts
-      '(("/GmailAccount/INBOX" . ?1)
-        ("/OutlookAccount/INBOX" . ?2)
-        ("/IFIC/INBOX" . ?3)
-        ("/GmailAccount/Sent" . ?4)
-        ("/OutlookAccount/Sent" . ?5)
-        ("/IFIC/Sent" . ?6)
-        ("/GmailAccount/Drafts" . ?7)
-        ("/OutlookAccount/Drafts" . ?8)
-        ("/IFIC/Drafts" . ?9)
-        ("/GmailAccount/Junk" . ?0)
-        ("/OutlookAccount/Junk" . ?')
-        ("/IFIC/Junk" . ?¡)
+      '(("/IFIC/INBOX" . ?i)
+        ("/IFIC/Sent" . ?s)
+        ("/IFIC/Drafts" . ?d)
+        ("/IFIC/Junk" . ?j)
+        ("/IFIC/Trash" . ?t)
+        ;; ("/GmailAccount/INBOX" . ?1)
+        ;; ("/OutlookAccount/INBOX" . ?2)
+        ;; ("/GmailAccount/Sent" . ?4)
+        ;; ("/OutlookAccount/Sent" . ?5)
+        ;; ("/GmailAccount/Drafts" . ?7)
+        ;; ("/OutlookAccount/Drafts" . ?8)
+        ;; ("/GmailAccount/Junk" . ?0)
+        ;; ("/OutlookAccount/Junk" . ?')
         ))
 
 (setq auth-sources '("~/.authinfo"))
@@ -554,6 +538,8 @@ If the selected file is a directory, open it normally in Dired mode."
     (setq my-vterm-counter (1+ my-vterm-counter))))  ; Increment the counter for the next vterm buffer
 
 (global-set-key (kbd "C-t") 'my-vterm)
+(with-eval-after-load 'dired
+  (define-key dired-mode-map (kbd "C-t") 'my-vterm))
 
 ;; do latex table
 (defun latexify-data-table-region ()
@@ -590,20 +576,6 @@ If the selected file is a directory, open it normally in Dired mode."
 
 (global-set-key (kbd "C-c l t") 'latexify-data-table-region)
 
-(add-to-list 'image-file-name-extensions "pdf")
-(setq org-preview-latex-default-process 'dvisvgm)
-
-;; load latex and julia snippets in org
-(after! yasnippet
-  (add-hook 'org-mode-hook
-            (lambda ()
-              (yas-activate-extra-mode 'latex-mode)
-              (yas-activate-extra-mode 'julia-mode))))
-
-;;;; add cdlatex
-;; (use-package! cdlatex
-;;   :hook ((org-mode LaTeX-mode) . turn-on-cdlatex))
-
 ;; toggle math symbols and sub/per-indices automatically for .org files
 (after! org
   (add-hook 'org-mode-hook
@@ -625,3 +597,70 @@ If the selected file is a directory, open it normally in Dired mode."
 ;; Habilitar windmove con Shift + flechas
 (when (fboundp 'windmove-default-keybindings)
   (windmove-default-keybindings))
+
+(defun my-vterm-ciclope2 ()
+  "Abre vterm en /home/asaez/, ejecuta ciclope2 y luego julia."
+  (interactive)
+  (let ((default-directory "/home/asaez/"))
+    (my-vterm)
+    (run-at-time "0.1 sec" nil
+                 (lambda ()
+                   (vterm-send-string "ciclope2\n")
+                   ;;(vterm-send-string "julia\n")
+                   ))))
+
+(global-set-key (kbd "C-c f t") #'my-vterm-ciclope2)
+
+(defun julia-ciclope2 ()
+  "Abre julia-repl y envía ';', '/home/asaez/bin/ciclope2' y 'julia' al REPL *julia:main* con 1s de espera entre el 2do y 3er comando."
+  (interactive)
+  (julia-repl)
+  (run-at-time
+   "0.1 sec" nil
+   (lambda ()
+     (let* ((buf "*julia:main*")
+            (proc (get-buffer-process buf)))
+       (when proc
+         (comint-send-string proc ";\n")
+         (comint-send-string proc "/home/asaez/bin/ciclope2\n")
+         (run-at-time
+          "3 sec" nil
+          (lambda ()
+            (comint-send-string proc "julia\n"))))))))
+
+(global-set-key (kbd "C-c c j") #'julia-ciclope2)
+
+(defun julia-local ()
+  (interactive)
+  (julia-repl)
+  )
+
+(global-set-key (kbd "C-c j") #'julia-local)
+
+
+(global-set-key (kbd "C-c r") #'rename-buffer)
+
+
+;; oculta buffers entre "*"
+(setq doom-hide-special-buffers t) ;; set to nil to show all
+
+;; activate flyspell in latex automatically
+(add-hook 'LaTeX-mode-hook #'flyspell-mode)
+
+;; do not hide buffer **
+(after! persp-mode
+  (defun my/include-julia-buffer-in-workspace-buffers (orig-fn &rest args)
+    "Include *julia:main* in +workspace-buffer-list, even if it's not part of current perspective."
+    (let* ((buffers (apply orig-fn args))
+           (julia-buffer (get-buffer "*julia:main*")))
+      (if (and julia-buffer (not (memq julia-buffer buffers)))
+          (cons julia-buffer buffers)
+        buffers)))
+
+  (advice-add #'+workspace-buffer-list :around #'my/include-julia-buffer-in-workspace-buffers))
+
+(after! julia-repl
+  (defun my/add-julia-buffer-to-workspace ()
+    (when-let ((buf (get-buffer "*julia:main*")))
+      (persp-add-buffer buf)))
+  (add-hook 'julia-repl-hook #'my/add-julia-buffer-to-workspace))

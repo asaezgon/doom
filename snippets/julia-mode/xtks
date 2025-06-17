@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: ticks x-axis
+# uuid:
+# key: xtks
+# condition: t
+# --
+xticks($1, $2, fontsize=8)

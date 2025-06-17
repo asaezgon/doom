@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: empty array
+# uuid:
+# key: emparr
+# condition: t
+# --
+Array{$1,1}()

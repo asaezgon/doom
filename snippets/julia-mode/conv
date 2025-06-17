@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: convert type
+# uuid:
+# key: conv
+# condition: t
+# --
+convert.($1, $2)

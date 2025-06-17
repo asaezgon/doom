@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: range x-axis
+# uuid:
+# key: xlm
+# condition: t
+# --
+xlim($1,$2)

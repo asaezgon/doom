@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: undef matrix
+# uuid:
+# key: undefmat
+# condition: t
+# --
+Matrix{$1}(undef, $2, $3)

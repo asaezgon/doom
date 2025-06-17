@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: range y-axis
+# uuid:
+# key: ylm
+# condition: t
+# --
+ylim($1,$2)
