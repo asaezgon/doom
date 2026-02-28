@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: pion
+# uuid:
+# key: pion
+# condition: t
+# --
+\pi(p_{\pi})

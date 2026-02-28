@@ -1,0 +1,56 @@
+# -*- mode: snippet -*-
+# name: write alphaio
+# uuid:
+# key: walphaio
+# condition: t
+# --
+
+    io = IOBuffer();
+    write(io,
+
+          """
+          You can read the data with this routine:
+
+          fn = fname
+          fb = BDIO_open(fn, "r")
+          obs = []
+          dobs = []
+          while ALPHAdobs_next_p(fb)
+              d = ALPHAdobs_read_parameters(fb)
+              push!(dobs, d)
+              extra_info = d["extra"]
+              sz = tuple(d["size"]...)
+
+              dw = ALPHAdobs_read_next(fb, size=sz)
+              push!(obs, dw)
+          end
+          BDIO_close!(fb)
+
+          and then e.g. you can extract the pp correlator data with
+
+          ind_pp = findfirst([dobs[i]["extra"]["obs"] for i in eachindex(dobs)] .== "pp_corr")
+          x0 = dobs[ind_pp]["extra"]["x0"]
+          pp_data = obs[ind_pp]
+
+          the same for the ap correlator substituting pp -> ap;
+
+          and for t^2<E> you do
+
+          ind_t2e = findfirst([dobs[i]["extra"]["obs"] for i in eachindex(dobs)] .== "t2E")
+          x0 = dobs[ind_t2e]["extra"]["x0"]
+          tf = dobs[ind_t2e]["extra"]["tflow"]
+          t2E_data = obs[ind_t2e]
+
+          """)
+
+    fb = ALPHAdobs_create(fn, io)
+
+    d = Dict{String, Any}(
+        "obs"      => obs,
+        "beta"     => beta,
+        "ens_id"   => ens,
+        "x0"       => eachindex(obs_d)
+    )
+    ALPHAdobs_write(fb, obs_d, extra=d)
+
+    ALPHAdobs_close(fb)

@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: refig
+# uuid:
+# key: refig
+# condition: t
+# --
+Fig.~\ref{fig$1}

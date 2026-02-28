@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: kaon mom
+# uuid:
+# key: kmom
+# condition: t
+# --
+\vec{p}_K

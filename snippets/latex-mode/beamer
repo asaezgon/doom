@@ -11,6 +11,7 @@
 \usepackage{tikz}
 \usepackage{xcolor}
 \usepackage{appendixnumberbeamer}
+\usepackage{caption}
 
 \usetheme[progressbar=frametitle]{metropolis}
 
@@ -18,7 +19,7 @@
 \setbeamertemplate{blocks}[rounded][shadow=false]
 
 %Define colors
-\definecolor{mycolor}{RGB}{150, 150, 150}
+\definecolor{mycolor}{RGB}{255, 155, 155}
 \definecolor{background}{RGB}{255,255,255}
 \definecolor{accent}{RGB}{70, 130, 180} % Add an accent color
 \definecolor{myred}{RGB}{230, 105, 105}
@@ -30,11 +31,11 @@
 \definecolor{mywhite}{RGB}{255, 255, 255}
 
 %Adding logo to title page
-%\titlegraphic{\includegraphics[width=3cm]{Unilogo_schwarz_T3.png}}
+\titlegraphic{\includegraphics[width=10cm]{/home/asaez/logo_ific.png}}
 
 %Adjust color theme
 \setbeamercolor{frametitle}{bg=mycolor}
-\setbeamercolor{title separator}{fg=mycolor}
+\setbeamercolor{title separator}{fg=black}
 \setbeamercolor{footline}{fg=gray}
 \setbeamercolor{progress bar}{fg=black}
 \setbeamercolor{block title}{bg=accent, fg=white}
@@ -42,11 +43,11 @@
 \setbeamercolor{background canvas}{bg=background}  % This sets the slide background color
 
 %Adding footer
-\setbeamertemplate{frame footer}{\insertshortauthor~(\insertshortinstitute)}
+%\setbeamertemplate{frame footer}{\insertshortauthor~(\insertshortinstitute)}
 
 %Set parameters for title page
 \title{Title}
-\author[Alejandro Saez-Gonzalvo]{Alejandro Saez-Gonzalvo}
+\author[Alejandro Saez]{Alejandro Saez}
 \institute{IFIC}
 \date{\today{}}
 
@@ -62,9 +63,24 @@
     \blindtext
 \end{frame}
 
+\begin{frame}{Chiral-continuum extrapolation}
+\begin{figure}[ht]
+  \centering
+  \includegraphics[width=.8\textwidth]{}
+    \captionsetup{labelformat=empty}
+  \caption{\centering\textbf{NB}: Similar picture using IC-based model average. Cutoff effetcs: $\mbox{O}(a^2\alpha_{\rm S}^{\Gamma}),\;\Gamma=-0.111,...,0.760\;\rightarrow\;\sim0.4\sigma$ varitation.}
+\end{figure}
+\end{frame}
+
+
 \begin{frame}{Some Items}
     \begin{itemize}
         \item Item 1
+        \begin{tikzpicture}[remember picture,overlay]
+  \draw[red, very thick, fill=none]
+    ([xshift=0.5cm,yshift=3.1cm]current page.south west)
+    rectangle ++(6cm,1.3cm);
+\end{tikzpicture}
         \item Item 2
         \item Item 3
         \begin{itemize}
@@ -128,6 +144,10 @@
         child { node {Muon $g-2$} }
       };
   \end{tikzpicture}
+  \begin{tikzpicture}[remember picture,overlay]
+  \node[fill=white, draw=white, very thick, rounded corners,
+          text width=2cm, align=center] at (-4.5,4.15) {\tiny $\sigma_{\rm SU(2)}^2\sim5\%\sigma_{\rm tot.}^2$};
+\end{tikzpicture}
 \end{frame}
 
 \begin{frame}{Horizontal Conceptual Tree}

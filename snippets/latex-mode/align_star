@@ -4,6 +4,6 @@
 # --
 \begin{align*}
 \label{eq:$0}
-$1&=$2, \notag \\\
+$1&=$2, \\\
 $3&=$4.
 \end{align*}

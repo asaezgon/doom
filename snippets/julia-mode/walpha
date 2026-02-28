@@ -1,0 +1,24 @@
+# -*- mode: snippet -*-
+# name: write alphaio
+# uuid:
+# key: walpha
+# condition: t
+# --
+
+io = IOBuffer();
+write(io, """
+
+    """)
+
+fn = "/home/asaez/foo.bdio"
+#fbb = ALPHAdobs_create(fn, "./header.txt")
+fbb = ALPHAdobs_create(fn, io)
+#fbb = ALPHAdobs_append(fn)
+
+d = Dict{String, Any}(
+    "obs"      => "foo",
+    "ens_id"   => ens_av
+)
+ALPHAdobs_write(fbb, foo, extra=d)
+
+ALPHAdobs_close(fbb)

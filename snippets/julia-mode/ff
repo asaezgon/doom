@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: findfirst
+# uuid:
+# key: ff
+# condition: t
+# --
+findfirst(x -> x == $1, $2)

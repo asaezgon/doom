@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: link
+# uuid:
+# key: url
+# condition: t
+# --
+\url{$1}$2

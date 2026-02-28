@@ -1,0 +1,21 @@
+# -*- mode: snippet -*-
+# name: read alphaio
+# uuid:
+# key: ralphaio
+# condition: t
+# --
+
+fn = fname
+fb = BDIO_open(fn, "r")
+obs = []
+dobs = []
+while ALPHAdobs_next_p(fb)
+    d = ALPHAdobs_read_parameters(fb)
+    push!(dobs, d)
+    extra_info = d["extra"]
+    sz = tuple(d["size"]...)
+
+    dw = ALPHAdobs_read_next(fb, size=sz)
+    push!(obs, dw)
+end
+BDIO_close!(fb)

@@ -8,11 +8,17 @@ function model(x,p)
 	 return [p[1] + p[2] * x[i] for i in 1:length(x)]
 end
 
+@.model(x,p) = p[1] + p[2] * x
+
 x = $1
 uwerr.(x)
 y = $2
 uwerr.(y)
-up, chi2, chi_exp, pv = fit_alg(model,value.(x),y,$3)
-res = model_continuum(x, up)
+x_ph = $3
+nparm = $4
+up, chi2, chi2_exp, pv = fit_alg(model, value.(x), y, nparm)
+@printf("chi2 = %.5g, chi2exp = %.5g, pv = %.5g\n", chi2, chi2_exp, pv)
+res = model(x_ph, up)
 uwerr.(res)
 uwerr.(up)
+@printf("res = %.5g +/- %.5g\n\n", value(res[1]), err(res[1]))

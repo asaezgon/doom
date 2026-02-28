@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: kaon
+# uuid:
+# key: kaon
+# condition: t
+# --
+K(p_K)

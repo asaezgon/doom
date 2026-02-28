@@ -59,3 +59,11 @@
 
 (package! calfw)
 (package! calfw-org)
+
+(package! openwith)
+
+(package! org-alert)
+
+(package! org-super-agenda)
+
+(package! dired-rsync)

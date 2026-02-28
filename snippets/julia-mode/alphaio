@@ -1,0 +1,42 @@
+# -*- mode: snippet -*-
+# name: alphaio
+# uuid:
+# key: alphaio
+# condition: t
+# --
+
+
+io = IOBuffer();
+write(io, """
+
+    """)
+
+fn = fname
+#fbb = ALPHAdobs_create(fn, "./header.txt")
+fbb = ALPHAdobs_create(fn, io)
+#fbb = ALPHAdobs_append(fn)
+
+d = Dict{String, Any}(
+    "obs"      => "foo",
+    "ens_id"   => ens
+)
+ALPHAdobs_write(fbb, foo, extra=d)
+
+ALPHAdobs_close(fbb)
+
+#################################
+
+fn = fname
+fb = BDIO_open(fn, "r")
+obs = []
+dobs = []
+while ALPHAdobs_next_p(fb)
+    d = ALPHAdobs_read_parameters(fb)
+    push!(dobs, d)
+    extra_info = d["extra"]
+    sz = tuple(d["size"]...)
+
+    dw = ALPHAdobs_read_next(fb, size=sz)
+    push!(obs, dw)
+end
+BDIO_close!(fb)

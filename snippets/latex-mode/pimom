@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: pion mom
+# uuid:
+# key: pimom
+# condition: t
+# --
+\vec{p}_{\pi}

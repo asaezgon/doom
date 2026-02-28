@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: ret
+# uuid:
+# key: ret
+# condition: t
+# --
+Table~\ref{tab$1}

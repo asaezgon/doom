@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: res
+# uuid:
+# key: res
+# condition: t
+# --
+Sec.~\ref{sec$1}

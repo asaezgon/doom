@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: deepcopy
+# uuid:
+# key: dp
+# condition: t
+# --
+deepcopy($1)

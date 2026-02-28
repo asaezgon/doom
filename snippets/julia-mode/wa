@@ -1,0 +1,25 @@
+# -*- mode: snippet -*-
+# name: write alpha
+# uuid:
+# key: wa
+# condition: t
+# --
+
+
+io = IOBuffer();
+write(io, """
+
+    """)
+
+fn = $1
+#fbb = ALPHAdobs_create(fn, "./header.txt")
+fbb = ALPHAdobs_create(fn, io)
+#fbb = ALPHAdobs_append(fn)
+
+d = Dict{String, Any}(
+    "obs"      => $2,
+    "ens_id"   => $3
+)
+ALPHAdobs_write(fbb, $4, extra=d)
+
+ALPHAdobs_close(fbb)

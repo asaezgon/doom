@@ -41,6 +41,30 @@
 ;; If you use `org' and don't want your org files in the default location below,
 ;; change `org-directory'. It must be set before org loads!
 (setq org-directory "~/org/")
+(setq org-agenda-files '("~/org/todo.org"
+                         "~/org/agenda.org"))
+(setq org-deadline-warning-days 7) ;; avisa siempre con 7 días de margen
+(setq org-agenda-include-deadlines t)   ;; que los deadlines se vean
+(setq org-agenda-include-all-todo t)    ;; incluye TODOs
+(setq org-agenda-show-future-repeats 'next) ;; que los repetitivos salgan en vista futura
+(setq org-agenda-todo-list-sublevels t)         ;; muestra subtareas
+(setq org-agenda-show-all-dates t)             ;; incluye fechas futuras
+(setq org-agenda-include-deadlines t)         ;; importante!
+(setq org-agenda-include-diary t)
+;; Vista mensual como predeterminada
+(setq org-agenda-start-on-weekday nil)  ;; empieza desde hoy
+(setq org-agenda-span 'month)           ;; vista de un mes
+(setq org-agenda-start-day "0d")        ;; incluye días pasados si quieres
+
+;; Mostrar subtareas
+(setq org-agenda-todo-list-sublevels t)
+
+(use-package! org-alert
+  :after org
+  :config
+  (setq org-alert-notification-title "⚡ Recordatorio Org")
+  (setq org-alert-interval 60) ;; chequea cada 60 segundos
+  (org-alert-enable))
 
 ;; Whenever you reconfigure a package, make sure to wrap your config in an
 ;; `after!' block, otherwise Doom's defaults may override your settings. E.g.
@@ -220,56 +244,6 @@ START and END specify the region, and DIGITS specifies the number of significant
 ;; Asignar C-DEL para borrar palabras hacia atrás sin copiar
 (global-set-key (kbd "C-<backspace>") 'my-backward-delete-word)
 
-;; When opening pdf, open in another window, can be with open-other os similar easier...
-(defun my-find-file-and-split-right (filename)
-  "Open a file, splitting the window vertically only if a PDF is not already open in another window."
-  (interactive "FOpen file: ")
-  (if (and (stringp filename) (string-match-p "\\.pdf\\'" filename))  ; Si es un PDF
-      (let ((pdf-window (seq-find (lambda (win)
-                                     (with-selected-window win
-                                       (derived-mode-p 'pdf-view-mode)))
-                                   (window-list))))  ; Buscar una ventana con pdf-view-mode
-        (if pdf-window
-            (select-window pdf-window)  ; Si ya hay un PDF abierto, usar su ventana
-          (progn
-            (split-window-right)  ; Si no hay, dividir ventana
-            (other-window 1)))    ; Moverse a la nueva ventana
-        (find-file filename)
-        (pdf-view-mode))  ; Activar pdf-view-mode
-    (find-file filename)))  ; Si no es PDF, abrir normalmente
-
-;;(global-set-key (kbd "C-x C-f") 'my-find-file-and-split-right)
-
-(defun my-dired-open-pdf-split-right ()
-  "Open a PDF file from Dired without splitting if another PDF is already open.
-If the selected file is a directory, open it normally in Dired mode."
-  (interactive)
-  (let* ((file (dired-get-file-for-visit))  ; Get the selected file
-         (pdf-window (seq-find (lambda (win)
-                                  (with-selected-window win
-                                    (derived-mode-p 'pdf-view-mode)))
-                                (window-list))))  ; Find an existing PDF window
-    (cond
-     ;; If it's a directory, open it normally in Dired
-     ((file-directory-p file)
-      (dired-find-file))  ; Use `dired-find-file` to enter directories
-
-     ;; If it's a PDF, open it in the appropriate window
-     ((string-match-p "\\.pdf\\'" file)
-      (if pdf-window
-          (select-window pdf-window)  ; Reuse existing PDF window
-        (progn
-          (split-window-right)
-          (other-window 1)))  ; If no existing window, split and switch
-      (find-file file)
-      (pdf-view-mode))  ; Enable PDF mode
-
-     ;; For other files, open normally
-     (t (find-file file)))))
-
-;; (after! dired
-;;   (define-key dired-mode-map (kbd "RET") #'my-dired-open-pdf-split-right))
-
 (defun my-shrink-window-1-line (&optional n)
   "Shrink the current window vertically by N lines (default 1)."
   (interactive "p")
@@ -402,113 +376,23 @@ If the selected file is a directory, open it normally in Dired mode."
 (add-hook 'magit-post-refresh-hook 'diff-hl-magit-post-refresh)
 (add-hook 'find-file-hook #'turn-on-diff-hl-mode)
 
+;; use local git on remote servers
+;; ;; --- Forzar Magit a usar git local ---
+;; (setq magit-remote-git-executable nil)  ;; ignorar git remoto
+;; (setq magit-git-executable (executable-find "git"))  ;; tu git local
+
+;; ;; --- Ajuste de TRAMP para que no encuentre git viejo ---
+;; (after! tramp
+;;   ;; Solo rutas seguras para ejecutables
+;;   (setq tramp-remote-path '("~/.local/bin" "/usr/local/bin" "/bin" "/usr/bin"))
+;;   ;; Desactivar detección de git remoto completamente
+;;   (advice-add 'tramp-get-remote-git :override (lambda (&rest _) nil)))
+
 ;; git-gutter para ver cambios en tramp
 (use-package! git-gutter
   :hook (prog-mode . git-gutter-mode)
   :config
   (setq git-gutter:update-interval 2)) ;; Actualiza cada 2 segundos
-
-;; mu4e
-;; (setq mu4e-maildir "~/Maildir/gmail"
-;;       mu4e-get-mail-command "offlineimap"
-;;       mu4e-update-interval 300
-;;       mu4e-compose-signature "Alejandro")
-
-;; (setq user-mail-address "asaez426@gmail.com"
-;;       user-full-name "Alejandro Saez")
-
-;; (setq mu4e-drafts-folder "/[Gmail]/Drafts"
-;;       mu4e-sent-folder   "/[Gmail]/Sent Mail"
-;;       mu4e-trash-folder  "/[Gmail]/Trash")
-
-;; (setq mu4e-maildir "~/Maildir/IFIC"
-;;       mu4e-get-mail-command "offlineimap"
-;;       mu4e-update-interval 300
-;;       mu4e-compose-signature "Alejandro")
-
-;; (setq user-mail-address "asaez@ific.uv.es"
-;;       user-full-name "Alejandro Saez")
-
-;; (setq mu4e-drafts-folder "/IFIC/Drafts"
-;;       mu4e-sent-folder   "/IFIC/Sent"
-;;       mu4e-trash-folder  "/IFIC/Trash")
-
-(use-package! mu4e
-  :config
-  ;; Habilitar el contexto para múltiples cuentas
-  (setq mu4e-contexts
-        `( ;; ,(make-mu4e-context
-           ;;   :name "Gmail"
-           ;;   :match-func (lambda (msg) (when msg (string= "asaez426@gmail.com" (mu4e-message-field msg :from))))
-           ;;   :vars '((user-mail-address . "asaez426@gmail.com")
-           ;;           (user-full-name . "Alejandro Saez")
-           ;;           (mu4e-drafts-folder . "/[Gmail]/Drafts")
-           ;;           (mu4e-sent-folder   . "/[Gmail]/Sent Mail")
-           ;;           (mu4e-trash-folder  . "/[Gmail]/Trash")
-           ;;           (mu4e-compose-signature . "Alejandro")
-           ;;           (smtpmail-smtp-user . "asaez426")
-           ;;           (smtpmail-local-domain . "gmail.com")
-           ;;           (smtpmail-default-smtp-server . "smtp.gmail.com")
-           ;;           (smtpmail-smtp-server . "smtp.gmail.com")
-           ;;           (smtpmail-smtp-service . 587)
-           ;;           (smtpmail-auth-credentials . '(("smtp.gmail.com" 587 "asaez426@gmail.com" nil)))
-           ;;           (smtpmail-stream-type  . starttls)
-           ;;           (smtpmail-starttls-credentials . (("smtp.gmail.com" 587 nil nil)))
-           ;;           ))
-
-           ,(make-mu4e-context
-             :name "IFIC"
-             :match-func (lambda (msg) (when msg (string= "asaez@ific.uv.es" (mu4e-message-field msg :from))))
-             :vars '((user-mail-address . "asaez@ific.uv.es")
-                     (user-full-name . "Alejandro Saez")
-                     (mu4e-drafts-folder . "/IFIC/Drafts")
-                     (mu4e-sent-folder   . "/IFIC/Sent")
-                     (mu4e-trash-folder  . "/IFIC/Trash")
-                     (mu4e-compose-signature . "Alejandro")
-                     (smtpmail-smtp-user . "asaez")
-                     (smtpmail-local-domain . "ific.uv.es")
-                     (smtpmail-default-ifmx-server . "ifmx.ific.uv.es")
-                     (smtpmail-ifmx-server . "ifmx.ific.uv.es")
-                     (smtpmail-ifmx-service . 587)
-                     (smtpmail-stream-type  . starttls)
-                     (smtpmail-starttls-credentials . (("ifmx.ific.uv.es" 587 t t)))
-             ))
-           )))
-
-(setq mu4e-bookmarks
-      '((:name "Unread messages"
-        ;; :query "(maildir:/GmailAccount/INBOX/ OR maildir:/IFIC/INBOX/ OR maildir:/OutlookAccount/INBOX/) AND flag:unread"
-         :query "(maildir:/IFIC/INBOX/) AND flag:unread"
-         :key ?u)
-        ))
-
-(setq mu4e-maildir-shortcuts
-      '(("/IFIC/INBOX" . ?i)
-        ("/IFIC/Sent" . ?s)
-        ("/IFIC/Drafts" . ?d)
-        ("/IFIC/Junk" . ?j)
-        ("/IFIC/Trash" . ?t)
-        ;; ("/GmailAccount/INBOX" . ?1)
-        ;; ("/OutlookAccount/INBOX" . ?2)
-        ;; ("/GmailAccount/Sent" . ?4)
-        ;; ("/OutlookAccount/Sent" . ?5)
-        ;; ("/GmailAccount/Drafts" . ?7)
-        ;; ("/OutlookAccount/Drafts" . ?8)
-        ;; ("/GmailAccount/Junk" . ?0)
-        ;; ("/OutlookAccount/Junk" . ?')
-        ))
-
-(setq auth-sources '("~/.authinfo"))
-
-(setq mu4e-headers-listing-switches "-alh --group-directories-first")
-
-(setq mu4e-show-images t)
-
-(setq mu4e-headers-fields
-      '((:human-date    .  12)   ;; Shows the date in a human-readable format
-        (:flags         .   6)   ;; Message flags
-        (:from          .  22)   ;; Sender
-        (:subject       .  nil)))
 
 ;; set TeX as default input method for mu4e compose
 (defun my-enable-unicode-input ()
@@ -522,20 +406,37 @@ If the selected file is a directory, open it normally in Dired mode."
 
 (global-set-key (kbd "C-x m") 'mu4e)
 
+(global-set-key (kbd "C-c C-e") 'mu4e-view-save-message)
+
+(after! vterm
+  (setq vterm-shell "/usr/bin/zsh"))
+
+(after! vterm
+  (setq vterm-kill-buffer-on-exit t)
+
+  (add-hook 'vterm-exit-functions
+            (lambda (buffer _event)
+              (let ((win (get-buffer-window buffer t)))
+                (when (window-live-p win)
+                  (delete-window win))))))
+
 ;; count vterm as normal window
 (after! vterm
   (set-popup-rule! "^\\*vterm.*\\*$" :ignore t))
 
-;; rename vterm so that you can open several of them
 (defvar my-vterm-counter 1
   "Counter to generate unique vterm buffer names.")
+
 (defun my-vterm ()
-  "Split the window with the bottom window taking 1/3 of the total screen height,
-   and open vterm in the bottom window with a unique buffer name."
+  "Split window placing vterm in a bottom window taking 1/3 height."
   (interactive)
-  (let ((vterm-name (format "*vterm-%d*" my-vterm-counter)))  ; Use the counter to generate the buffer expand-file-name
-    (vterm vterm-name)  ; Open vterm in the bottom window with a custom name
-    (setq my-vterm-counter (1+ my-vterm-counter))))  ; Increment the counter for the next vterm buffer
+  (let* ((height (floor (* 0.33 (window-total-height))))
+         (vterm-name (format "*vterm-%d*" my-vterm-counter))
+         (new-window (split-window-vertically (- height))))
+
+    (select-window new-window)
+    (vterm vterm-name)
+    (setq my-vterm-counter (1+ my-vterm-counter))))
 
 (global-set-key (kbd "C-t") 'my-vterm)
 (with-eval-after-load 'dired
@@ -647,7 +548,7 @@ If the selected file is a directory, open it normally in Dired mode."
 ;; activate flyspell in latex automatically
 (add-hook 'LaTeX-mode-hook #'flyspell-mode)
 
-;; do not hide buffer **
+;; do not hide buffer *julia*
 (after! persp-mode
   (defun my/include-julia-buffer-in-workspace-buffers (orig-fn &rest args)
     "Include *julia:main* in +workspace-buffer-list, even if it's not part of current perspective."
@@ -664,3 +565,400 @@ If the selected file is a directory, open it normally in Dired mode."
     (when-let ((buf (get-buffer "*julia:main*")))
       (persp-add-buffer buf)))
   (add-hook 'julia-repl-hook #'my/add-julia-buffer-to-workspace))
+
+(setq delete-by-moving-to-trash t)
+(setq trash-directory "~/.local/share/Trash/files/")
+
+(defun my-delete-file-really (file)
+  "Borra FILE de verdad, sin usar la papelera."
+  (interactive "fDelete file: ")
+  (let ((delete-by-moving-to-trash nil))
+    (delete-file file t)))
+
+(defun my-dired-do-delete-really ()
+  "Borrar archivos marcados en Dired sin usar la papelera."
+  (interactive)
+  (let ((delete-by-moving-to-trash nil))
+    (dired-do-delete)))
+
+(with-eval-after-load 'dired
+  (define-key dired-mode-map (kbd "D") #'my-dired-do-delete-really))
+
+
+(use-package! mu4e
+  :config
+  (setq mu4e-attachment-dir "~/phys"
+        mu4e-get-mail-command "offlineimap"
+        mu4e-update-interval 60
+        mu4e-view-show-images t
+        mu4e-view-show-addresses t
+        mu4e-maildir "/home/asaez/Maildir"
+        browse-url-browser-function 'browse-url-default-browser
+        send-mail-function 'sendmail-send-it
+        message-send-mail-function 'sendmail-send-it
+        sendmail-program "/usr/bin/msmtp"
+        mail-specify-envelope-from t
+        message-sendmail-envelope-from 'header
+        auth-sources '("~/.authinfo.gpg" "~/.authinfo" "~/.netrc")
+        mu4e-headers-listing-switches "-alh --group-directories-first"
+        mu4e-headers-fields
+        '((:human-date . 12)
+          (:flags . 6)
+          (:from . 22)
+          (:subject . nil))
+        message-kill-buffer-on-exit t)
+
+  ;; MULTI-ACCOUNT SUPPORT
+  (setq mu4e-contexts
+        `( ,(make-mu4e-context
+             :name "ific"
+             :enter-func (lambda () (mu4e-message "Entrando al contexto IFIC"))
+             :match-func (lambda (msg)
+                           (when msg
+                             (string-match-p "^/ific" (mu4e-message-field msg :maildir))))
+             :vars '((user-mail-address . "asaez@ific.uv.es")
+                     (user-full-name . "Alejandro Saez")
+                     (mu4e-sent-folder . "/ific/Sent")
+                     (mu4e-drafts-folder . "/ific/Drafts")
+                     (mu4e-trash-folder . "/ific/Trash")
+                     (mu4e-refile-folder . "/ific/Archive")
+                     ;;(mu4e-compose-signature . "Ale")
+                     ))
+
+           ,(make-mu4e-context
+             :name "gmail"
+             :enter-func (lambda () (mu4e-message "Entrando al contexto Gmail"))
+             :match-func (lambda (msg)
+                           (when msg
+                             (string-match-p "^/gmail" (mu4e-message-field msg :maildir))))
+             :vars '((user-mail-address . "asaez426@gmail.com")
+                     (user-full-name . "Alejandro Saez")
+                     (mu4e-sent-folder . "/gmail/Sent")
+                     (mu4e-drafts-folder . "/gmail/Drafts")
+                     (mu4e-trash-folder . "/gmail/Trash")
+                     (mu4e-refile-folder . "/gmail/Archive")
+                     ;;(mu4e-compose-signature . "Ale")
+                     ))))
+
+  ;; Opcional: empezar sin contexto activo
+  (setq mu4e-context-policy 'ask
+        mu4e-compose-context-policy 'ask)
+
+  ;; Atajos
+  (setq mu4e-maildir-shortcuts
+        '(("/ific/INBOX" . ?i)
+          ("/gmail/INBOX" . ?g))
+;;             ("/ific/Sent" . ?s)
+;;             ("/ific/Trash" . ?t)
+;;             ("/ific/Drafts" . ?d)
+;;             ("/ific/Junk" . ?j)
+             )
+
+  ;; Bookmarks (opcionalmente duplicar si quieres para gmail)
+  (setq mu4e-bookmarks
+        '((:name "Unread messages IFIC"
+           :query "maildir:/ific/INBOX AND flag:unread"
+           :key ?u)
+          (:name "Unread messages Gmail"
+           :query "maildir:/gmail/INBOX AND flag:unread"
+           :key ?U)))
+)
+
+(add-hook 'message-sent-hook #'message-kill-buffer)
+
+(setq mu4e-compose-reply-to-all t)
+
+(after! mu4e
+  (setq mml-attach-file-at-the-end t     ; adjunta al final del mensaje
+        mml-insert-mime-markers t))      ; muestra los <#part> visibles
+
+(use-package! openwith
+  :config
+  (setq openwith-associations
+        '(("\\.pdf\\'" "evince" (file))))
+)
+(openwith-mode -1)
+
+(use-package! pdf-tools
+  :mode ("\\.pdf\\'" . pdf-view-mode)  ;; Asocia .pdf a pdf-view-mode
+  :config
+  (pdf-tools-install)                   ;; Instala y activa pdf-tools
+  ;; Opcional: algunas configuraciones recomendadas
+  (setq-default pdf-view-display-size 'fit-page))
+
+(defun open-pdf-with-evince ()
+  "Open current PDF file with evince."
+  (interactive)
+  (let ((file (buffer-file-name)))
+    (when (and file (string-match-p "\\.pdf\\'" file))
+      (start-process "evince" nil "evince" file))))
+
+(use-package! pdf-tools
+  :defer t
+  :config
+  ;; Asegúrate de que pdf-tools está instalado y habilitado
+  (pdf-tools-install)
+
+  ;; Asignar una tecla, por ejemplo C-c e para abrir con evince
+  (define-key pdf-view-mode-map (kbd "C-x e") #'open-pdf-with-evince))
+
+(defun dired-open-pdf-with-evince ()
+  "Abrir el archivo PDF seleccionado en Dired con evince."
+  (interactive)
+  (let ((file (dired-get-file-for-visit)))
+    (when (string-match-p "\\.pdf\\'" file)
+      (start-process "evince" nil "evince" file))))
+
+(with-eval-after-load 'dired
+  (define-key dired-mode-map (kbd "C-x e") #'dired-open-pdf-with-evince))
+
+
+;; Sobrescribir el comportamiento por defecto si usas Doom
+;; Esto se activa al abrir un PDF
+(after! pdf-view
+  (setq +pdf--backend 'pdf-tools) ;; fallback backend si remoto
+  (setq +pdf-open-function #'my/open-pdf))
+
+(setq browse-url-browser-function 'browse-url-firefox)
+
+;; wifi
+(defun my-nmcli-get-saved-connections ()
+  "Return a list of saved connection IDs via nmcli."
+  (let* ((output (shell-command-to-string "nmcli -t -f NAME connection show"))
+         (lines (split-string output "\n" t)))
+    (delete-dups (remove "" lines))))
+
+(defun my-nmcli-get-wifi-list ()
+  "Return a list of available WiFi SSIDs via nmcli scan."
+  (let* ((output (shell-command-to-string "nmcli -t -f SSID device wifi list"))
+         (lines (split-string output "\n" t)))
+    (delete-dups (remove "" lines))))
+
+(defun my-connect-wifi ()
+  "Connect to WiFi via nmcli, choosing between saved or new connection."
+  (interactive)
+  (let ((choice (completing-read
+                  "Connect to: "
+                  '("Saved connection" "New WiFi scan") nil t)))
+    (cond
+     ((string-equal choice "Saved connection")
+      (let* ((saved (my-nmcli-get-saved-connections))
+             (chosen (completing-read "Choose saved connection: " saved nil t))
+             (command (format "nmcli connection up id '%s'" chosen)))
+        (async-shell-command command)))
+     ((string-equal choice "New WiFi scan")
+      (let* ((ssid-list (my-nmcli-get-wifi-list))
+             (chosen-ssid (completing-read "Choose SSID: " ssid-list nil t))
+             (password (read-passwd (format "Password for %s: " chosen-ssid)))
+             (command (format "nmcli device wifi connect '%s' password '%s'" chosen-ssid password)))
+        (async-shell-command command))))))
+
+(global-set-key (kbd "C-c w f") #'my-connect-wifi)
+
+(setq ispell-dictionary "british")
+
+(defun window-split-toggle ()
+  "Toggle between horizontal and vertical split with two windows."
+  (interactive)
+  (if (> (length (window-list)) 2)
+      (error "Can't toggle with more than 2 windows!")
+    (let ((func (if (window-full-height-p)
+                    #'split-window-vertically
+                  #'split-window-horizontally)))
+      (delete-other-windows)
+      (funcall func)
+      (save-selected-window
+        (other-window 1)
+        (switch-to-buffer (other-buffer))))))
+
+(after! company
+  (add-to-list 'company-backends 'company-reftex))
+
+;; --- FORZAR REPL de Julia a la derecha (50/50) -------------------------
+(after! julia-repl
+  (require 'seq) ;; seq.el viene con Emacs >25
+
+  ;; 1) Limpia reglas previas que matan nuestra intención (evita duplicados)
+  (setq display-buffer-alist
+        (seq-remove (lambda (entry)
+                      (and (stringp (car entry))
+                           (string-match-p "^\\*julia" (car entry))))
+                    display-buffer-alist))
+
+  ;; 2) Regla de +popup (Doom) — preferida en Doom Emacs
+  ;;    Esto fuerza popups de julia a la derecha y 50% de ancho.
+  (set-popup-rule! "^\\*julia.*\\*"
+    :side 'right
+    :size 0.5
+    :select t
+    :quit nil
+    :ttl nil)
+
+  ;; 3) Regla genérica de display-buffer (fallback si algo ignora set-popup-rule!)
+  (add-to-list 'display-buffer-alist
+               '("^\\*julia.*\\*"
+                 (display-buffer-reuse-window display-buffer-in-side-window)
+                 (side . right)
+                 (slot . 0)
+                 (window-width . 0.5)))
+
+  ;; 4) Parche local: cuando se crea la REPL, hacer que split prefiera horizontal
+  ;;    (no cambia tu política global permanentemente, solo durante la llamada).
+  (defun my/julia--with-horizontal-splits (orig-fn &rest args)
+    "Al abrir REPL de Julia, preferir splits side-by-side."
+    (let ((split-height-threshold nil) ;; no dividir verticalmente
+          (split-width-threshold 0))    ;; permitir dividir a la derecha
+      (apply orig-fn args)))
+  ;; Advisar la invocación directa de la REPL (evalúa luego si hace falta apuntar a otra fn)
+  (advice-add #'julia-repl :around #'my/julia--with-horizontal-splits))
+;; ---------------------------------------------------------------------
+
+(set-popup-rule! "^\\*julia.*\\*"
+  :side 'right
+  :size 0.5
+  :select nil   ;; <--- no coger foco
+  :quit nil
+  :ttl nil)
+
+(add-hook 'dired-mode-hook #'dired-omit-mode)
+
+(after! dired-x
+  ;; Ocultar todo lo que empiece por "."
+  (setq dired-omit-files "^\\.[^.].*"))
+
+;; copy files with rsync
+
+(defun my-dired-rsync-jump (dest &optional jump)
+  "Copiar archivos marcados en Dired a DEST usando rsync con salto SSH opcional.
+DEST puede ser local o remoto (TRAMP).
+Si JUMP se indica, se usa como host de salto en la forma user@host."
+  (interactive
+   (list (read-file-name "Destino rsync: "
+                         (dired-dwim-target-directory))
+         (let ((j (read-string "Host de salto (user@host), dejar vacío si no hay: ")))
+           (if (string-empty-p j) nil j))))
+  (let* ((files (dired-get-marked-files))
+         (dest-remote-host (file-remote-p dest 'host))
+         (dest-remote-user (file-remote-p dest 'user))
+         (dest-remote-path (file-remote-p dest 'localname))
+         (dest-rsync (if dest-remote-host
+                         (format "%s@%s:%s" dest-remote-user dest-remote-host dest-remote-path)
+                       dest))
+         (ssh-command (if jump
+                          (format "ssh -J %s" jump)
+                        "ssh"))
+         (cmd (format "rsync -avh --progress -e '%s' %s %s"
+                      ssh-command
+                      (mapconcat #'shell-quote-argument files " ")
+                      (shell-quote-argument dest-rsync))))
+    (async-shell-command cmd "*rsync output*")))
+
+;; Asignar una tecla en Dired
+(define-key dired-mode-map (kbd "C-c C-j") #'my-dired-rsync-jump)
+
+
+;; lookup web
+(add-to-list '+lookup-provider-url-alist
+             '("Google" "https://www.google.com/search?q=%s"))
+
+;; Add Inspire to K binding
+(add-to-list '+lookup-provider-url-alist
+               '("Inspire HEP"
+"https://inspirehep.net/literature?sort=mostrecent&size=25&page=1&q=%s"))
+(add-to-list '+lookup-provider-url-alist
+               '("ArXiv" "https://arxiv.org/pdf/%s"))
+
+;; add todo to dashboard
+(after! doom-dashboard
+  (defun my/dashboard-insert-madrid-todos ()
+    "Inserta un bloque de TODOs tipo Madrid en el dashboard."
+    (let ((inhibit-read-only t))
+      (goto-char (point-max))  ;; al final del dashboard
+      (insert "\n📌 TODO Madrid\n\n")
+      (insert "  todo: TODO fK/f\\pi ALPHA logo?\n")
+      (insert "  todo: TODO Mainz preprint number\n")
+      (insert "  todo: TODO JC\n")
+      (insert "  todo: TODO Mumbai\n")
+      (insert "  todo: TODO reembolso\n")
+      (insert "  todo: TODO IFIC\n")
+      (insert "  todo: TODO contrato\n")
+      (insert "  todo: TODO Pietro seminar reminder\n")
+      (insert "  todo: TODO CESGA, t0/t2\n")
+      (insert "  todo: TODO Think 3-point funs\n\n")))
+
+  ;; Añadimos la función al dashboard
+  (add-to-list '+doom-dashboard-functions #'my/dashboard-insert-madrid-todos t))
+
+;; dashboard banner image
+;;(setq fancy-splash-image "/home/asaez/Pictures/wallpapers/pamphlets/banner2.png")
+
+;; paragraph move
+(defun ale/backward-paragraph-real ()
+  "Ir siempre al párrafo anterior, sin quedarse en el inicio del actual."
+  (interactive)
+  (backward-paragraph)
+  (when (looking-at-p "[^\n]")
+    (backward-paragraph)))
+
+(global-set-key (kbd "M-p") #'ale/backward-paragraph-real)
+(global-set-key (kbd "M-n") #'forward-paragraph)
+
+(global-set-key (kbd "C-c C-m") 'call-last-kbd-macro)
+
+;; bdio printer
+(defun lsbdio (file depth recursive)
+  "Ejecuta `lsbdio` sobre un archivo BDIO.
+Opciones:
+- -d DEPTH (opcional, ENTER para omitir)
+- -r (opcional)"
+  (interactive
+   (list
+    (read-file-name "Archivo BDIO: ")
+    (let ((input (read-string "id -d (ENTER para omitir): ")))
+      (unless (string-empty-p input)
+        input))
+    (y-or-n-p "¿Usar -r (recursive)? ")))
+  (let* ((buf (get-buffer-create "*lsbdio*"))
+         (args
+          (append
+           (when depth
+             (list "-d" depth))
+           (when recursive
+             (list "-r"))
+           (list file))))
+    (with-current-buffer buf
+      (read-only-mode -1)
+      (erase-buffer)
+      (insert (format "$ lsbdio %s\n\n" (string-join args " ")))
+      (let ((exit-code
+             (apply #'call-process "lsbdio" nil buf t args)))
+        (insert (format "\n[exit code: %d]" exit-code))
+        (read-only-mode 1)))
+    (display-buffer buf)))
+
+(global-set-key (kbd "C-c b l") 'lsbdio)
+
+;; kill previous buffer when entering new one
+(setq dired-kill-when-opening-new-dired-buffer t)
+
+;; from vertical to horizontal split
+(defun my-toggle-split-1/3 ()
+  "Toggle between vertical split and horizontal split with bottom window 1/3."
+  (interactive)
+  (when (= (count-windows) 2)
+    (let* ((this-win-buffer (window-buffer))
+           (next-win-buffer (window-buffer (next-window)))
+           (split-vert-p (window-combined-p))) ;; t si están lado a lado
+      (delete-other-windows)
+      (if (not split-vert-p)
+          ;; Si estaba vertical -> pasar a horizontal con 1/3 abajo
+          (let* ((height (floor (* 0.33 (window-total-height))))
+                 (new-win (split-window-vertically (- height))))
+            (set-window-buffer new-win next-win-buffer)
+            (set-window-buffer (selected-window) this-win-buffer))
+        ;; Si estaba horizontal -> pasar a vertical 50/50
+        (let ((new-win (split-window-horizontally)))
+          (set-window-buffer new-win next-win-buffer)
+          (set-window-buffer (selected-window) this-win-buffer))))))
+
+(global-set-key (kbd "C-x |") #'my-toggle-split-1/3)

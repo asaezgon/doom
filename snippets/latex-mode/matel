@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: matrix element
+# uuid:
+# key: matel
+# condition: t
+# --
+|\left<$1\right|$2\left|$3\right>|

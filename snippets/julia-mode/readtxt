@@ -1,0 +1,11 @@
+# -*- mode: snippet -*-
+# name: read txt file
+# uuid:
+# key: readtxt
+# condition: t
+# --
+
+data = readdlm("$1"; comments=true)
+
+x   = data[:, 1]
+y   = data[:, 2]

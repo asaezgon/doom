@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: verbatim
+# uuid:
+# key: verb
+# condition: t
+# --
+\verb|$1|$2

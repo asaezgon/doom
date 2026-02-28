@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: ref slide
+# uuid:
+# key: refsl
+# condition: t
+# --
+{\tiny \color{gray} [$1]}

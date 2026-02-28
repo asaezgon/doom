@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: req
+# uuid:
+# key: req
+# condition: t
+# --
+Eq.~(\ref{eq$1})

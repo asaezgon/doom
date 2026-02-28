@@ -1,0 +1,7 @@
+# -*- mode: snippet -*-
+# name: reapp
+# uuid:
+# key: reapp
+# condition: t
+# --
+Appendix~\ref{app$1}
